@@ -52,7 +52,7 @@ def writeHypoHyperPairsToFile(hypo_hyper_pairs, outputfile):
 
 def main(args):
     print(args.inputwikifile)
-    hearstPatterns = HearstPatterns(extended=False)
+    hearstPatterns = HearstPatterns(extended=True)
 
     hypo_hyper_pairs = extractHearstPatterns(args.inputwikifile,
                                              hearstPatterns)

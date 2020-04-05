@@ -24,6 +24,21 @@ def extractHyperHypoExtractions(wikideppaths, relevantPaths):
         IMPLEMENT
     '''
 
+    with open(wikideppaths, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+
+            word1, word2, deppath = line.split("\t")
+
+            if deppath in relevantPaths:
+                if relevantPaths[deppath] == "forward":
+                    depPathExtractions.append((word1, word2))
+                elif relevantPaths[deppath] == "reverse":
+                    depPathExtractions.append((word2, word1))
+
+
     return depPathExtractions
 
 
@@ -31,8 +46,20 @@ def readPaths(relevantdeppaths):
     '''
         READ THE RELEVANT DEPENDENCY PATHS HERE
     '''
+    # Key is deppath,
+    # Value is "forward", "backward" or "negative"
+    relevantPaths = {}
 
-    # return relevantPaths
+    with open(relevantdeppaths, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+
+            dep_path, path_type = line.split("\t")
+            relevantPaths[dep_path] = path_type
+
+    return relevantPaths
 
 
 def writeHypoHyperPairsToFile(hypo_hyper_pairs, outputfile):

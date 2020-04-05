@@ -42,11 +42,24 @@ def extractRelevantPaths(wikideppaths, wordpairs_labels, outputfile):
                 3. Negative Paths: If this path exists, definitely not a hyper/hyponym relations
                 4. etc......
             '''
+            if (word1, word2) in wordpairs_labels and wordpairs_labels[(word1, word2)]:
+                if (deppath, 'forward') not in relevantDepPaths2counts:
+                    relevantDepPaths2counts[(deppath, 'forward')] = 0
+                relevantDepPaths2counts[(deppath, 'forward')] += 1
+            elif (word2, word1) in wordpairs_labels and wordpairs_labels[(word2, word1)]:
+                if (deppath, 'reverse') not in relevantDepPaths2counts:
+                    relevantDepPaths2counts[(deppath, 'reverse')] = 0
+                relevantDepPaths2counts[(deppath, 'reverse')] += 1
+            else:
+                if (deppath, 'negative') not in relevantDepPaths2counts:
+                    relevantDepPaths2counts[(deppath, 'negative')] = 0
+                relevantDepPaths2counts[(deppath, 'negative')] += 1
+
 
     with open(outputfile, 'w') as f:
-        for dep_path in relevantDepPaths2counts:
-            if relevantDepPaths2counts[dep_path] > 0:
-                f.write(dep_path)
+        for dep_path, path_type in relevantDepPaths2counts:
+            if relevantDepPaths2counts[(dep_path, path_type)] > 0:
+                f.write(dep_path + "\t" + path_type)
                 f.write('\n')
 
 
